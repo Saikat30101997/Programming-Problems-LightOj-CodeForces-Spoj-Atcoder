@@ -38,68 +38,52 @@
 #define rev(i,a,b)      for(__typeof(i) i=a; i>=b; i--)
 
 using namespace std;
-
-vector<int>v[25];
-int visit[30];
-int BFS(int source,int destination)
+vector<int>graph[100005];
+int visit[100005];
+int chk,src;
+int total=0;
+void DFS(int source)
 {
-    for(int i=0;i<=25;i++)visit[i]=0;
-    int ans=0;
-    queue<int>q;
-    q.push(source);
-    visit[source]=0;
-    while(!q.empty())
+    total++;
+    visit[source]=1;
+
+    for(int i=0; i<graph[source].size(); i++)
     {
-        int u=q.front();
-        q.pop();
-        for(int i=0;i<v[u].size();i++)
-        {
-            int v1=v[u][i];
-            if(visit[v1]==0){
-            visit[v1]=visit[u]+1;
-            if(v1==destination)return visit[v1];
-            q.push(v1);
+        int v=graph[source][i];
+        if(visit[v]==0)
+            DFS(v);
 
-            }
-
-        }
     }
-
-
 }
 
 int main()
 {
+    int tst;
+    cin>>tst;
+    while(tst--)
+    {
+        int n,m,l;
+        cin>>n>>m>>l;
+        int u,v;
+        for(int i=1; i<=m; i++)
+        {
+            cin>>u>>v;
+            graph[u].pb(v);
 
-   int t,u,v1,x,source,dest,cnt=1;
-   while(1)
-   {
+        }
+        int x;
+        for(int i=1; i<=l; i++)
+        {
 
-       for(int i=1;i<=19;i++)
-       {
-           if(sc("%d",&x)==EOF) return 0;
+            cin>>src;
+            if(visit[src]==0)DFS(src);
 
-           for(int j=1;j<=x;j++)
-           {
-              sc("%d",&u);
-              v[i].pb(u);
-              v[u].pb(i);
-           }
-       }
+        }
+        cout<<total<<endl;
 
-       sc("%d",&t);
-       pf("Test Set #%d\n",cnt++);
+        total=0;
+        for(int i=0; i<=n; i++){graph[i].clear();visit[i]=0;}
 
-       for(int i=1;i<=t;i++)
-       {
-           sc("%d %d", &source,&dest);
-           pf("%2d to %2d: %d\n",source,dest,BFS(source,dest));
-       }
-
-       for(int i=0;i<=25;i++){v[i].clear();}
-       pf("\n");
-
-   }
+    }
 
 }
-
